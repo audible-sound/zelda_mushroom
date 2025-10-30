@@ -1,6 +1,6 @@
 import pygame, sys
 from settings import *
-from level import Level
+from sprite_group.level import Level
 
 class Game:
     def __init__(self):
