@@ -11,20 +11,17 @@ class Tile(pygame.sprite.Sprite):
         if sprite_type == 'object':
             self.image = surface
             # Check image size
-            image_width, image_height = self.image.get_size()
+            _, image_height = self.image.get_size()
 
             if image_height > TILESIZE:
                 # Tall objects sit on the ground
                 self.rect = self.image.get_rect(midbottom=(pos[0] + TILESIZE / 2, pos[1] + TILESIZE))
             else:
-                # All 64x64 or smaller stay grid-aligned
                 self.rect = self.image.get_rect(topleft=pos)
         else:
             self.image = pygame.transform.scale(surface, (TILESIZE, TILESIZE))
             self.rect = self.image.get_rect(topleft=(pos[0], pos[1] - TILESIZE))
 
-        # ---- Hitbox setup ----
-        # Create hitbox (optional: adjust differently for object)
         if sprite_type == 'object':
             if self.rect.height > 128:
                 # For tall objects (bigger than 128px)

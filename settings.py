@@ -1,15 +1,9 @@
 # Set window size
 WIDTH = 1280
 HEIGHT = 720
-HITBOX_OFFSET = {
-	'player': -26,
-	'object': -40,
-	'grass': -10,
-	'invisible': 0
- }
 
 # Set frames per second
-FPS = 60
+FPS = 90
 
 # Set tile size
 TILESIZE = 64
@@ -17,10 +11,30 @@ TILESIZE = 64
 # Weapons
 weapon_data = {
     'lance': {
-        'cooldown': 250,
+        'cooldown': 1000,
         'damage': 25,
         'graphic': './assets/weapons/lance/full.png'
-    }
+    },
+    'axe': {
+        'cooldown': 2000,
+        'damage': 75,
+        'graphic': './assets/weapons/axe/full.png'
+    },
+    'sword': {
+        'cooldown': 800,
+        'damage': 15,
+        'graphic': './assets/weapons/sword/full.png'
+    },
+    'sabre': {
+        'cooldown': 1500,
+        'damage': 50,
+        'graphic': './assets/weapons/sabre/full.png'
+    },
+    'staff': {
+        'cooldown': 500,
+        'damage': 10,
+        'graphic': './assets/weapons/staff/full.png'
+    },
 }
 
 # magic
@@ -44,10 +58,11 @@ magic_data = {
 
 # enemy
 monster_data = {
-	'squid': {'health': 100,'exp':100,'damage':20,'attack_type': 'slash', 'attack_sound':'../audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 360},
-	'raccoon': {'health': 300,'exp':250,'damage':40,'attack_type': 'claw',  'attack_sound':'../audio/attack/claw.wav','speed': 2, 'resistance': 3, 'attack_radius': 120, 'notice_radius': 400},
-	'spirit': {'health': 100,'exp':110,'damage':8,'attack_type': 'thunder', 'attack_sound':'../audio/attack/fireball.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 60, 'notice_radius': 350},
-	'bamboo': {'health': 70,'exp':120,'damage':6,'attack_type': 'leaf_attack', 'attack_sound':'../audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 50, 'notice_radius': 300}
+	'shroom_goon': {'health': 300,'damage':20,'attack_type': 'slash', 'attack_sound':'./assets/audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 300},
+	'shroom_mob': {'health': 200,'damage':10,'attack_type': 'slash',  'attack_sound':'./assets/audio/attack/slash.wav','speed': 2, 'resistance': 3, 'attack_radius': 70, 'notice_radius': 300},
+    'spirit': {'health': 100,'damage':25,'attack_type': 'thunder', 'attack_sound':'./assets/audio/attack/fireball.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 60, 'notice_radius': 300},
+    'zombie_shroom': {'health': 500,'damage':40,'attack_type': 'claw', 'attack_sound':'./assets/audio/attack/claw.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 150, 'notice_radius': 400},
+    'fire_shroom': {'health': 550,'damage':50,'attack_type': 'claw', 'attack_sound':'./assets/audio/attack/claw.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 150, 'notice_radius': 400},
  }
 
 # UI

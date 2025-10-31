@@ -17,7 +17,6 @@ def import_asset_surfaces(path):
     for _, __, img_files in walk(path):
         for img in img_files:
             full_path= path + '/' + img
-            print(full_path)
             paths.append(full_path)
             
     paths.sort()

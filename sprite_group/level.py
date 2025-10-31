@@ -1,4 +1,5 @@
 import pygame
+from entity.enemy import Enemy
 from settings import *
 from sprite_group.y_sort_camera_group import YSortCameraGroup
 from tile import Tile
@@ -24,6 +25,7 @@ class Level:
             'boundary': import_csv_layout('assets/tilemap/map_boundary.csv'),
             'grass': import_csv_layout('assets/tilemap/map_grass.csv'),
             'objects': import_csv_layout('assets/tilemap/map_objects.csv'),
+            'entities': import_csv_layout('assets/tilemap/map_entities.csv')
         }
 
         graphics = {
@@ -40,15 +42,45 @@ class Level:
                         if style == 'boundary':
                             Tile((x, y), [self.obstacle_sprites], 'invisible')
 
-                        if style == 'grass':
+                        elif style == 'grass':
                             grass_image = graphics['grass'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'grass', grass_image)
 
-                        if style == 'objects':
+                        elif style == 'objects':
                             object_image = graphics['objects'][int(col)]
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'object', object_image) 
-
-        self.player = Player((100, 100), [self.visible_sprites], self.obstacle_sprites, self.create_attack, self.destroy_attack)
+                        
+                        elif style == 'entities':
+                            if col == '0':
+                                self.player = Player(
+                                    (x, y), 
+                                    [self.visible_sprites], 
+                                    self.obstacle_sprites, 
+                                    self.create_attack,
+                                    self.destroy_attack)
+                            else:
+                                monster_name = 'shroom_goon'
+                                if col == '1':
+                                    monster_name = 'shroom_goon'
+                                elif col == '2':
+                                    monster_name = 'shroom_mob'
+                                elif col == '3':
+                                    monster_name = 'fire_shroom'
+                                elif col == '4':
+                                    monster_name = 'zombie_shroom'
+                                elif col == '5':
+                                    monster_name = 'spirit'
+                        
+                                Enemy(
+                                    monster_name,
+                                    (x, y),
+                                    [self.visible_sprites,],
+                                    self.obstacle_sprites,
+                                    None,
+                                    None,
+                                    None
+                                )
+                            
 
     def create_attack(self):
         self.current_attack = Weapon(self.player, [self.visible_sprites])
