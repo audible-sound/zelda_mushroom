@@ -1,6 +1,12 @@
 # Set window size
 WIDTH = 1280
 HEIGHT = 720
+HITBOX_OFFSET = {
+	'player': -26,
+	'object': -40,
+	'grass': -10,
+	'invisible': 0
+ }
 
 # Set frames per second
 FPS = 60

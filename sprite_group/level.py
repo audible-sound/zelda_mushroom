@@ -45,9 +45,8 @@ class Level:
                             Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'grass', grass_image)
 
                         if style == 'objects':
-                            pass
-                            # object_image = graphics['objects'][int(col)]
-                            # Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'object', object_image) 
+                            object_image = graphics['objects'][int(col)]
+                            Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'object', object_image) 
 
         self.player = Player((100, 100), [self.visible_sprites], self.obstacle_sprites, self.create_attack, self.destroy_attack)
 
