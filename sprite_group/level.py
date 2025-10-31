@@ -1,3 +1,4 @@
+from random import randint
 import pygame
 from entity.enemy import Enemy
 from settings import *
@@ -7,6 +8,7 @@ from entity.player import Player
 from utils import import_csv_layout, import_asset_surfaces
 from attack.weapon import Weapon
 from ui import UI
+from particle.animation_player import AnimationPlayer
 
 class Level:
     def __init__(self):
@@ -15,13 +17,13 @@ class Level:
         self.visible_sprites = YSortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
  
-        self.create_map()
-
-        self.create_attack = None
         self.attack_sprites = pygame.sprite.Group()
         self.attackable_sprites = pygame.sprite.Group()
         
         self.ui = UI()
+        
+        self.animation_player = AnimationPlayer()
+        self.create_map()
 
     def create_map(self):
         layouts = {
@@ -47,7 +49,10 @@ class Level:
 
                         elif style == 'grass':
                             grass_image = graphics['grass'][int(col)]
-                            Tile((x, y), [self.visible_sprites, self.obstacle_sprites, self.attackable_sprites], 'grass', grass_image)
+                            Tile((x, y), 
+                                 [self.visible_sprites, self.obstacle_sprites, self.attackable_sprites], 
+                                 'grass', 
+                                 grass_image)
 
                         elif style == 'objects':
                             object_image = graphics['objects'][int(col)]
@@ -78,10 +83,11 @@ class Level:
                                     monster_name,
                                     (x, y),
                                     [self.visible_sprites, 
-                                     self.attackable_sprites],
+                                     self.attackable_sprites
+                                    ],
                                     self.obstacle_sprites,
                                     None,
-                                    None
+                                    self.trigger_death_particles
                                 )
                             
 
@@ -92,6 +98,24 @@ class Level:
         if self.current_attack:
             self.current_attack.kill()
             self.current_attack = None
+            
+    def player_attack_logic(self):
+        if self.attack_sprites:
+            for attack_sprite in self.attack_sprites:
+                collision_sprites = pygame.sprite.spritecollide(attack_sprite,self.attackable_sprites,False)
+                if collision_sprites:
+                    for target_sprite in collision_sprites:
+                        if target_sprite.sprite_type == 'grass':
+                            pos = target_sprite.rect.center
+                            offset = pygame.math.Vector2(0,75)
+                            for _ in range(randint(3,6)):
+                                self.animation_player.create_leaf_particles(pos - offset,[self.visible_sprites])
+                            target_sprite.kill()
+                        else:
+                            target_sprite.get_damage(self.player,attack_sprite.sprite_type)
+                            
+    def trigger_death_particles(self,pos,particle_type):
+        self.animation_player.create_particles(particle_type,pos,self.visible_sprites)
 
     def run(self):
         # update and draw the game
@@ -99,3 +123,4 @@ class Level:
         self.visible_sprites.enemy_update(self.player)
         self.ui.display(self.player)
         self.visible_sprites.update()
+        self.player_attack_logic()

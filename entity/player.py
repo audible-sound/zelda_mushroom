@@ -44,15 +44,11 @@ class Player(Entity):
         self.stats = {
             'health': 100,
             'energy': 100,
-            'attack': 10,
-            'magic': 4
         }
 
         self.max_stats = {
             'health': 100,
             'energy': 100,
-            'attack': 20,
-            'magic': 10
         }
         
 
@@ -167,6 +163,10 @@ class Player(Entity):
         self.image = animation[int(self.frame_index)]
         self.image = pygame.transform.scale(self.image, (TILESIZE, TILESIZE))
         self.rect = self.image.get_rect(center = self.hitbox.center)
+        
+    def get_weapon_damage(self):
+        weapon_damage = weapon_data[self.weapon]['damage']
+        return weapon_damage
 
     def update(self):
         self.keyboard_input()

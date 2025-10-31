@@ -35,6 +35,9 @@ class Enemy(Entity):
 		self.vulnerable = True
 		self.hit_time = None
 		self.invincibility_duration = 300
+		self.attack_cooldown = 400
+	
+		self.trigger_death_particles = trigger_death_particles
   
 	def import_graphics(self, monster_name):
 		path = f'./assets/monsters/{monster_name}/'
@@ -92,9 +95,37 @@ class Enemy(Entity):
 		else:
 			self.image.set_alpha(255)
    
+	def cooldowns(self):
+		current_time = pygame.time.get_ticks()
+		if not self.can_attack:
+			if current_time - self.attack_time >= self.attack_cooldown:
+				self.can_attack = True
+
+		if not self.vulnerable:
+			if current_time - self.hit_time >= self.invincibility_duration:
+				self.vulnerable = True
+   
+	def get_damage(self,player,attack_type):
+		if self.vulnerable:
+			self.direction = self.get_player_distance_direction(player)[1]
+			if attack_type == 'weapon':
+				self.health -= player.get_weapon_damage()
+			else:
+				pass
+				# self.health -= player.get_full_magic_damage()
+			self.hit_time = pygame.time.get_ticks()
+			self.vulnerable = False
+   
+	def check_death(self):
+		if self.health <= 0:
+			self.kill()
+			self.trigger_death_particles(self.rect.center,self.monster_name)
+   
 	def update(self):
 		self.move(self.speed)
 		self.animate()
+		self.cooldowns()
+		self.check_death()
 
 	def enemy_update(self, player):
 		self.get_status(player)
