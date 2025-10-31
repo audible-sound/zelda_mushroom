@@ -39,7 +39,7 @@ weapon_data = {
 
 # magic
 magic_data = {
-	'flame': {
+	'fire': {
         'strength': 15,
         'cost': 20,''
         'graphic':'./assets/particles/fire/fire.png'
@@ -61,8 +61,8 @@ monster_data = {
 	'shroom_goon': {'health': 300,'damage':20,'attack_type': 'slash', 'attack_sound':'./assets/audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 300},
 	'shroom_mob': {'health': 200,'damage':10,'attack_type': 'slash',  'attack_sound':'./assets/audio/attack/slash.wav','speed': 2, 'resistance': 3, 'attack_radius': 70, 'notice_radius': 300},
     'spirit': {'health': 100,'damage':25,'attack_type': 'thunder', 'attack_sound':'./assets/audio/attack/fireball.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 60, 'notice_radius': 300},
-    'zombie_shroom': {'health': 500,'damage':40,'attack_type': 'claw', 'attack_sound':'./assets/audio/attack/claw.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 150, 'notice_radius': 400},
-    'fire_shroom': {'health': 550,'damage':50,'attack_type': 'claw', 'attack_sound':'./assets/audio/attack/claw.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 150, 'notice_radius': 400},
+    'zombie_shroom': {'health': 500,'damage':40,'attack_type': 'zombie_shroom_attack', 'attack_sound':'./assets/audio/attack/claw.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 150, 'notice_radius': 300},
+    'fire_shroom': {'health': 550,'damage':50,'attack_type': 'fire_shroom_attack', 'attack_sound':'./assets/audio/attack/claw.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 150, 'notice_radius': 300},
  }
 
 # UI

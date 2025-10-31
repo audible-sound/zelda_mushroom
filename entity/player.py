@@ -4,7 +4,7 @@ from utils import import_asset_surfaces
 from entity.entity import Entity
 
 class Player(Entity):
-    def __init__(self, pos, groups, obstacle_sprites, create_attack, destroy_attack):
+    def __init__(self, pos, groups, obstacle_sprites, create_attack, destroy_attack, create_magic):
         super().__init__(groups)
 
         self.import_player_assets()
@@ -39,18 +39,27 @@ class Player(Entity):
         self.can_switch_magic = True
         self.magic_switch_time = 0
         self.magic_switch_cooldown = 200
+        self.create_magic = create_magic
+        
+        # damaged
+        self.vulnerable = True
+        self.hurt_time = None
+        self.invulnerability_duration = 500
 
         # stats
         self.stats = {
-            'health': 100,
+            'health': 200,
             'energy': 100,
         }
 
         self.max_stats = {
-            'health': 100,
+            'health': 200,
             'energy': 100,
         }
         
+        # weapon sound
+        self.weapon_attack_sound = pygame.mixer.Sound('./assets/audio/sword.wav')
+        self.weapon_attack_sound.set_volume(0.4)
 
     def import_player_assets(self):
         path = './assets/player/'
@@ -107,11 +116,16 @@ class Player(Entity):
                 self.attacking = True
                 self.attack_time = pygame.time.get_ticks()
                 self.create_attack()
+                self.weapon_attack_sound.play()
 
             # magic
             if keys[pygame.K_SPACE] and self.can_switch_magic:
                 self.attacking = True
                 self.attack_time = pygame.time.get_ticks()
+                type = list(magic_data.keys())[self.magic_index]
+                strength = list(magic_data.values())[self.magic_index]['strength']
+                cost = list(magic_data.values())[self.magic_index]['cost']
+                self.create_magic(type,strength,cost)
 
             # switch weapon
             if keys[pygame.K_u] and self.can_switch_weapon:
@@ -151,6 +165,10 @@ class Player(Entity):
         if not self.can_switch_magic:
             if current_time - self.magic_switch_time >= self.magic_switch_cooldown:
                 self.can_switch_magic = True
+                
+        if not self.vulnerable:
+            if current_time - self.hurt_time >= self.invulnerability_duration:
+                self.vulnerable = True
 
 
     def animate(self):
@@ -164,9 +182,25 @@ class Player(Entity):
         self.image = pygame.transform.scale(self.image, (TILESIZE, TILESIZE))
         self.rect = self.image.get_rect(center = self.hitbox.center)
         
+        if not self.vulnerable:
+            alpha = self.wave_value()
+            self.image.set_alpha(alpha)
+        else:
+            self.image.set_alpha(255)
+        
     def get_weapon_damage(self):
         weapon_damage = weapon_data[self.weapon]['damage']
         return weapon_damage
+    
+    def get_magic_damage(self):
+        spell_damage = magic_data[self.magic]['strength']
+        return spell_damage
+    
+    def energy_recovery(self):
+        if self.stats['energy'] < self.max_stats['energy']:
+            self.stats['energy'] += 0.01 * 10
+        else:
+            self.stats['energy'] = self.max_stats['energy']
 
     def update(self):
         self.keyboard_input()
@@ -174,4 +208,5 @@ class Player(Entity):
         self.get_status()
         self.animate()
         self.move(self.speed)
+        self.energy_recovery()
  

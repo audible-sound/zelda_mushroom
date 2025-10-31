@@ -1,6 +1,7 @@
 from random import randint
 import pygame
 from entity.enemy import Enemy
+from particle.magic_player import MagicPlayer
 from settings import *
 from sprite_group.y_sort_camera_group import YSortCameraGroup
 from tile import Tile
@@ -16,13 +17,14 @@ class Level:
         # init sprite groups
         self.visible_sprites = YSortCameraGroup()
         self.obstacle_sprites = pygame.sprite.Group()
- 
+        self.current_attack = None
         self.attack_sprites = pygame.sprite.Group()
         self.attackable_sprites = pygame.sprite.Group()
         
         self.ui = UI()
         
         self.animation_player = AnimationPlayer()
+        self.magic_player = MagicPlayer(self.animation_player)
         self.create_map()
 
     def create_map(self):
@@ -65,7 +67,9 @@ class Level:
                                     [self.visible_sprites], 
                                     self.obstacle_sprites, 
                                     self.create_attack,
-                                    self.destroy_attack)
+                                    self.destroy_attack,
+                                    self.create_magic
+                                    )
                             else:
                                 monster_name = 'shroom_goon'
                                 if col == '1':
@@ -86,13 +90,23 @@ class Level:
                                      self.attackable_sprites
                                     ],
                                     self.obstacle_sprites,
-                                    None,
+                                    self.damage_player,
                                     self.trigger_death_particles
                                 )
                             
 
     def create_attack(self):
         self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
+        
+    def create_magic(self,type,strength,cost):
+        if type == 'heal':
+            self.magic_player.heal(self.player,strength,cost,[self.visible_sprites])
+
+        if type == 'fire':
+            self.magic_player.fire(self.player,cost,[self.visible_sprites,self.attack_sprites])
+            
+        if type == 'ice':
+            self.magic_player.ice(self.player,cost,[self.visible_sprites,self.attack_sprites])
 
     def destroy_attack(self):
         if self.current_attack:
@@ -113,6 +127,13 @@ class Level:
                             target_sprite.kill()
                         else:
                             target_sprite.get_damage(self.player,attack_sprite.sprite_type)
+                            
+    def damage_player(self,amount,attack_type):
+        if self.player.vulnerable:
+            self.player.stats['health'] -= amount
+            self.player.vulnerable = False
+            self.player.hurt_time = pygame.time.get_ticks()
+            self.animation_player.create_particles(attack_type,self.player.rect.center,[self.visible_sprites])
                             
     def trigger_death_particles(self,pos,particle_type):
         self.animation_player.create_particles(particle_type,pos,self.visible_sprites)

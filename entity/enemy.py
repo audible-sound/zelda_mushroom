@@ -36,8 +36,16 @@ class Enemy(Entity):
 		self.hit_time = None
 		self.invincibility_duration = 300
 		self.attack_cooldown = 400
-	
+		self.damage_player = damage_player
 		self.trigger_death_particles = trigger_death_particles
+  
+		# Sound effects
+		self.death_sound = pygame.mixer.Sound('./assets/audio/death.wav')
+		self.hit_sound = pygame.mixer.Sound('./assets/audio/hit.wav')
+		self.attack_sound = pygame.mixer.Sound(monster_info['attack_sound'])
+		self.death_sound.set_volume(0.6)
+		self.hit_sound.set_volume(0.6)
+		self.attack_sound.set_volume(0.6)
   
 	def import_graphics(self, monster_name):
 		path = f'./assets/monsters/{monster_name}/'
@@ -72,6 +80,7 @@ class Enemy(Entity):
 	def actions(self,player):
 		if self.status == 'attack':
 			self.attack_time = pygame.time.get_ticks()
+			self.damage_player(self.attack_damage,self.attack_type)
 		elif self.status == 'move':
 			self.direction = self.get_player_distance_direction(player)[1]
 		else:
@@ -107,12 +116,12 @@ class Enemy(Entity):
    
 	def get_damage(self,player,attack_type):
 		if self.vulnerable:
+			self.hit_sound.play()
 			self.direction = self.get_player_distance_direction(player)[1]
 			if attack_type == 'weapon':
 				self.health -= player.get_weapon_damage()
 			else:
-				pass
-				# self.health -= player.get_full_magic_damage()
+				self.health -= player.get_magic_damage()
 			self.hit_time = pygame.time.get_ticks()
 			self.vulnerable = False
    
@@ -120,8 +129,14 @@ class Enemy(Entity):
 		if self.health <= 0:
 			self.kill()
 			self.trigger_death_particles(self.rect.center,self.monster_name)
+			self.death_sound.play()		
+   
+	def hit_reaction(self):
+		if not self.vulnerable:
+			self.direction *= -self.resistance
    
 	def update(self):
+		self.hit_reaction()
 		self.move(self.speed)
 		self.animate()
 		self.cooldowns()

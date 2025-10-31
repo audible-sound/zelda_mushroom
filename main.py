@@ -13,6 +13,11 @@ class Game:
 
         # Init Game Level
         self.level = Level()
+        
+        # Play bgm
+        main_sound = pygame.mixer.Sound('./assets/audio/main.ogg')
+        main_sound.set_volume(0.5)
+        main_sound.play(loops = -1)
 
     def run(self):
         while True:
