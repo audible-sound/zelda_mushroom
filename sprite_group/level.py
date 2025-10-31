@@ -18,6 +18,9 @@ class Level:
         self.create_map()
 
         self.create_attack = None
+        self.attack_sprites = pygame.sprite.Group()
+        self.attackable_sprites = pygame.sprite.Group()
+        
         self.ui = UI()
 
     def create_map(self):
@@ -44,7 +47,7 @@ class Level:
 
                         elif style == 'grass':
                             grass_image = graphics['grass'][int(col)]
-                            Tile((x, y), [self.visible_sprites, self.obstacle_sprites], 'grass', grass_image)
+                            Tile((x, y), [self.visible_sprites, self.obstacle_sprites, self.attackable_sprites], 'grass', grass_image)
 
                         elif style == 'objects':
                             object_image = graphics['objects'][int(col)]
@@ -74,16 +77,16 @@ class Level:
                                 Enemy(
                                     monster_name,
                                     (x, y),
-                                    [self.visible_sprites,],
+                                    [self.visible_sprites, 
+                                     self.attackable_sprites],
                                     self.obstacle_sprites,
-                                    None,
                                     None,
                                     None
                                 )
                             
 
     def create_attack(self):
-        self.current_attack = Weapon(self.player, [self.visible_sprites])
+        self.current_attack = Weapon(self.player, [self.visible_sprites, self.attack_sprites])
 
     def destroy_attack(self):
         if self.current_attack:
@@ -93,5 +96,6 @@ class Level:
     def run(self):
         # update and draw the game
         self.visible_sprites.custom_draw_sprites(self.player)
+        self.visible_sprites.enemy_update(self.player)
         self.ui.display(self.player)
         self.visible_sprites.update()
