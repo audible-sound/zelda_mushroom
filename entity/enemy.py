@@ -65,7 +65,12 @@ class Enemy(Entity):
 
 		return (distance,direction)
    
-	def get_status(self, player):
+	def get_status(self, player, dialog_active=False):
+		# If dialog is active, force idle
+		if dialog_active:
+			self.status = 'idle'
+			return
+		
 		distance = self.get_player_distance_direction(player)[0]
 
 		if distance <= self.attack_radius and self.can_attack:
@@ -94,7 +99,12 @@ class Enemy(Entity):
 		
 		return True
 
-	def actions(self,player):
+	def actions(self,player, dialog_active=False):
+		# If dialog is active, don't move or attack
+		if dialog_active:
+			self.direction = pygame.math.Vector2()
+			return
+		
 		if self.status == 'attack':
 			self.attack_time = pygame.time.get_ticks()
 			self.damage_player(self.attack_damage,self.attack_type)
@@ -175,6 +185,6 @@ class Enemy(Entity):
 		self.cooldowns()
 		self.check_death()
 
-	def enemy_update(self, player):
-		self.get_status(player)
-		self.actions(player)
+	def enemy_update(self, player, dialog_active=False):
+		self.get_status(player, dialog_active)
+		self.actions(player, dialog_active)

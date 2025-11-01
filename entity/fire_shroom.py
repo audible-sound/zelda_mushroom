@@ -7,7 +7,7 @@ from utils import import_asset_surfaces
 from settings import TILESIZE
 
 class FireShroom(Enemy):
-    def __init__(self, pos, groups, obstacle_sprites, damage_player, trigger_death_particles):
+    def __init__(self, pos, groups, obstacle_sprites, damage_player, trigger_death_particles, on_death_callback=None):
         super().__init__(
             'fire_shroom',
             pos,
@@ -16,6 +16,8 @@ class FireShroom(Enemy):
             damage_player,
             trigger_death_particles
         )
+        
+        self.on_death_callback = on_death_callback
         
         self.visible_sprites = groups[0] if groups else None
         self.vulnerable = True
@@ -73,7 +75,12 @@ class FireShroom(Enemy):
     def attack_dust(self):
         self.create_dust_burst()
     
-    def actions(self, player):
+    def actions(self, player, dialog_active=False):
+        # If dialog is active, don't move or attack
+        if dialog_active:
+            self.direction = pygame.math.Vector2()
+            return
+        
         if self.status == 'attack':
             if not self.attack_started:
                 self.attack_started = True
@@ -100,6 +107,15 @@ class FireShroom(Enemy):
                         self.direction = pygame.math.Vector2()
         else:
             self.direction = pygame.math.Vector2()
+    
+    def get_status(self, player, dialog_active=False):
+        # If dialog is active, force idle
+        if dialog_active:
+            self.status = 'idle'
+            return
+        
+        # Use parent class get_status for normal behavior
+        super().get_status(player, dialog_active)
 
     def animate(self):
         animation = self.animations[self.status]
@@ -145,4 +161,13 @@ class FireShroom(Enemy):
             self.image.set_alpha(alpha)
         else:
             self.image.set_alpha(255)
+
+    def check_death(self):
+        if self.health <= 0:
+            self.kill()
+            self.trigger_death_particles(self.rect.center, self.monster_name)
+            self.death_sound.play()
+
+            if self.on_death_callback:
+                self.on_death_callback()
 

@@ -42,7 +42,12 @@ class ZombieShroom(Enemy):
         self.animations['attack1'] = import_asset_surfaces(path + 'attack2')
         self.animations['attack2'] = import_asset_surfaces(path + 'attack3')
 
-    def get_status(self, player):
+    def get_status(self, player, dialog_active=False):
+        # If dialog is active, force idle
+        if dialog_active:
+            self.status = 'idle'
+            return
+        
         distance = self.get_player_distance_direction(player)[0]
         if distance <= self.attack_radius and self.can_attack:
             if self.status not in ['attack0', 'attack1', 'attack2']:
@@ -58,7 +63,12 @@ class ZombieShroom(Enemy):
         else:
             self.status = 'idle'
 
-    def actions(self, player):
+    def actions(self, player, dialog_active=False):
+        # If dialog is active, don't move or attack
+        if dialog_active:
+            self.direction = pygame.math.Vector2()
+            return
+        
         if 'attack' in self.status:
             if not self.attack_started:
                 self.attack_started = True

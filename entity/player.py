@@ -57,6 +57,9 @@ class Player(Entity):
             'energy': 100,
         }
         
+        # Dialog state
+        self.dialog_active = False
+        
         # weapon sound
         self.weapon_attack_sound = pygame.mixer.Sound('./assets/audio/sword.wav')
         self.weapon_attack_sound.set_volume(0.4)
@@ -89,6 +92,11 @@ class Player(Entity):
                 self.status = self.status.replace('_attack', '')
 
     def keyboard_input(self):
+        if self.dialog_active:
+            self.direction.x = 0
+            self.direction.y = 0
+            return
+            
         if not self.attacking:
             keys = pygame.key.get_pressed()
 
