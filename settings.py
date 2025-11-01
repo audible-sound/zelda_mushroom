@@ -77,3 +77,8 @@ UI_FONT_SIZE = 18
 UI_BG_COLOR = '#222222'
 HEALTH_COLOR = 'red'
 ENERGY_COLOR = 'blue'
+
+TITLE_FONT = 'assets/font/slkscr.ttf'
+LOGO_IMAGE = 'assets/menu/title.png'
+MENU_BG_IMAGE = 'assets/menu/menu_bg.png'
+MENU_BUTTON_SOUND = 'assets/audio/menu_button.wav'
