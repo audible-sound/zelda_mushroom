@@ -77,12 +77,45 @@ class Enemy(Entity):
 		else:
 			self.status = 'idle'
    
+	def can_move_in_direction(self, direction, speed):
+		if direction.magnitude() == 0:
+			return True
+		
+		test_direction = direction.normalize() if direction.magnitude() != 0 else direction
+		
+		test_hitbox = self.hitbox.copy()
+		test_hitbox.x += test_direction.x * speed
+		test_hitbox.y += test_direction.y * speed
+		
+		# Check if this position would collide with any obstacle
+		for sprite in self.obstacle_sprites:
+			if sprite.hitbox.colliderect(test_hitbox):
+				return False
+		
+		return True
+
 	def actions(self,player):
 		if self.status == 'attack':
 			self.attack_time = pygame.time.get_ticks()
 			self.damage_player(self.attack_damage,self.attack_type)
+			self.attack_sound.play()
 		elif self.status == 'move':
-			self.direction = self.get_player_distance_direction(player)[1]
+			desired_direction = self.get_player_distance_direction(player)[1]
+			
+			if self.can_move_in_direction(desired_direction, self.speed):
+				self.direction = desired_direction
+			else:
+				# Try to move in X direction only
+				x_direction = pygame.math.Vector2(desired_direction.x, 0)
+				if self.can_move_in_direction(x_direction, self.speed):
+					self.direction = x_direction
+				else:
+					# Try to move in Y direction only
+					y_direction = pygame.math.Vector2(0, desired_direction.y)
+					if self.can_move_in_direction(y_direction, self.speed):
+						self.direction = y_direction
+					else:
+						self.direction = pygame.math.Vector2()
 		else:
 			self.direction = pygame.math.Vector2()
    
@@ -110,7 +143,7 @@ class Enemy(Entity):
 			if current_time - self.attack_time >= self.attack_cooldown:
 				self.can_attack = True
 
-		if not self.vulnerable:
+		if not self.vulnerable and self.hit_time is not None:
 			if current_time - self.hit_time >= self.invincibility_duration:
 				self.vulnerable = True
    

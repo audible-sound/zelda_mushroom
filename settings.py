@@ -11,27 +11,27 @@ TILESIZE = 64
 # Weapons
 weapon_data = {
     'lance': {
-        'cooldown': 1000,
+        'cooldown': 2500,
         'damage': 25,
         'graphic': './assets/weapons/lance/full.png'
     },
     'axe': {
-        'cooldown': 2000,
+        'cooldown': 5000,
         'damage': 75,
         'graphic': './assets/weapons/axe/full.png'
     },
     'sword': {
-        'cooldown': 800,
+        'cooldown': 2000,
         'damage': 15,
         'graphic': './assets/weapons/sword/full.png'
     },
     'sabre': {
-        'cooldown': 1500,
+        'cooldown': 3500,
         'damage': 50,
         'graphic': './assets/weapons/sabre/full.png'
     },
     'staff': {
-        'cooldown': 500,
+        'cooldown': 1200,
         'damage': 10,
         'graphic': './assets/weapons/staff/full.png'
     },
@@ -59,10 +59,10 @@ magic_data = {
 # enemy
 monster_data = {
 	'shroom_goon': {'health': 300,'damage':20,'attack_type': 'slash', 'attack_sound':'./assets/audio/attack/slash.wav', 'speed': 3, 'resistance': 3, 'attack_radius': 80, 'notice_radius': 300},
-	'shroom_mob': {'health': 200,'damage':10,'attack_type': 'slash',  'attack_sound':'./assets/audio/attack/slash.wav','speed': 2, 'resistance': 3, 'attack_radius': 70, 'notice_radius': 300},
+	'shroom_mob': {'health': 200,'damage':10,'attack_type': 'slash',  'attack_sound':'./assets/audio/attack/slash.wav','speed': 2, 'resistance': 3, 'attack_radius': 70, 'notice_radius': 350},
     'spirit': {'health': 100,'damage':25,'attack_type': 'thunder', 'attack_sound':'./assets/audio/attack/fireball.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 60, 'notice_radius': 300},
-    'zombie_shroom': {'health': 500,'damage':40,'attack_type': 'zombie_shroom_attack', 'attack_sound':'./assets/audio/attack/claw.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 150, 'notice_radius': 300},
-    'fire_shroom': {'health': 550,'damage':50,'attack_type': 'fire_shroom_attack', 'attack_sound':'./assets/audio/attack/claw.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 150, 'notice_radius': 300},
+    'zombie_shroom': {'health': 500,'damage':40,'attack_type': 'zombie_shroom_attack', 'attack_sound':'./assets/audio/attack/claw.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 250, 'notice_radius': 400},
+    'fire_shroom': {'health': 550,'damage':60,'attack_type': 'fire_shroom_attack', 'attack_sound':'./assets/audio/attack/claw.wav', 'speed': 4, 'resistance': 3, 'attack_radius': 150, 'notice_radius': 400},
  }
 
 # UI

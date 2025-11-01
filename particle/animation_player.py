@@ -1,5 +1,5 @@
 from random import choice
-from particle.ParticleEffect import ParticleEffect
+from particle.particle_effect import ParticleEffect
 from utils import import_asset_surfaces
 
 
@@ -14,8 +14,10 @@ class AnimationPlayer:
             # attack particles
             'slash': import_asset_surfaces('./assets/particles/slash'),
             'thunder': import_asset_surfaces('./assets/particles/thunder'),
-            'fire_shroom_attack': import_asset_surfaces('./assets/monsters/fire_shroom/attack'),
-            'zombie_shroom_attack': import_asset_surfaces('./assets/monsters/zombie_shroom/attack'),
+            
+            # damage particles
+            'fire_damage': import_asset_surfaces('./assets/particles/fire_damage'),
+            'poison_damage': import_asset_surfaces('./assets/particles/poison_damage'),
             
             # death particles
             'fire_shroom': import_asset_surfaces('./assets/monsters/fire_shroom/die'),
