@@ -120,12 +120,14 @@ class Player(Entity):
 
             # magic
             if keys[pygame.K_SPACE] and self.can_switch_magic:
-                self.attacking = True
-                self.attack_time = pygame.time.get_ticks()
                 type = list(magic_data.keys())[self.magic_index]
                 strength = list(magic_data.values())[self.magic_index]['strength']
                 cost = list(magic_data.values())[self.magic_index]['cost']
-                self.create_magic(type,strength,cost)
+
+                if cost <= self.stats['energy']:
+                    self.attacking = True
+                    self.attack_time = pygame.time.get_ticks()
+                    self.create_magic(type,strength,cost)
 
             # switch weapon
             if keys[pygame.K_u] and self.can_switch_weapon:

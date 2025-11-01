@@ -19,6 +19,9 @@ class YSortCameraGroup(pygame.sprite.Group):
         self.offset.x = player.rect.centerx - self.half_width
         self.offset.y = player.rect.centery - self.half_height
 
+        self.offset.x = max(0, min(self.offset.x, self.map_rect.width - self.display_surface.get_width()))
+        self.offset.y = max(0, min(self.offset.y, self.map_rect.height - self.display_surface.get_height()))
+
         # Draw map
         map_offset_position = self.map_rect.topleft - self.offset
         self.display_surface.blit(self.map_surface, map_offset_position)

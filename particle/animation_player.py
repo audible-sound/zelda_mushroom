@@ -35,6 +35,6 @@ class AnimationPlayer:
         animation_frames = choice(self.frames['leaf'])
         ParticleEffect(pos,animation_frames,groups)
         
-    def create_particles(self,animation_type,pos,groups):
+    def create_particles(self,animation_type,pos,groups,direction=None):
         animation_frames = self.frames[animation_type]
-        ParticleEffect(pos,animation_frames,groups)
+        ParticleEffect(pos,animation_frames,groups,direction)

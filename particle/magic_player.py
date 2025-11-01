@@ -6,9 +6,9 @@ class MagicPlayer:
 	def __init__(self,animation_player):
 		self.animation_player = animation_player
 		self.sounds = {
-		'heal': pygame.mixer.Sound('./assets/audio/heal.wav'),
-		'fire':pygame.mixer.Sound('./assets/audio/fire.wav'),
-		'ice':pygame.mixer.Sound('./assets/audio/fire.wav')
+		'heal': pygame.mixer.Sound('./assets/audio/magic/heal.wav'),
+		'fire':pygame.mixer.Sound('./assets/audio/magic/fire.wav'),
+		'ice':pygame.mixer.Sound('./assets/audio/magic/ice.wav')
 		}
 
 	def heal(self,player,strength,cost,groups):
@@ -57,9 +57,9 @@ class MagicPlayer:
 					offset_x = (direction.x * i) * TILESIZE
 					x = player.rect.centerx + offset_x + randint(-TILESIZE // 3, TILESIZE // 3)
 					y = player.rect.centery + randint(-TILESIZE // 3, TILESIZE // 3)
-					self.animation_player.create_particles('ice',(x,y),groups)
+					self.animation_player.create_particles('ice',(x,y),groups,direction)
 				else: # vertical
 					offset_y = (direction.y * i) * TILESIZE
 					x = player.rect.centerx + randint(-TILESIZE // 3, TILESIZE // 3)
 					y = player.rect.centery + offset_y + randint(-TILESIZE // 3, TILESIZE // 3)
-					self.animation_player.create_particles('ice',(x,y),groups)
+					self.animation_player.create_particles('ice',(x,y),groups,direction)
